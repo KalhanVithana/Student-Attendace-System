@@ -1,0 +1,36 @@
+.main{
+   
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
+
+.left{
+
+    flex: 50%;
+    display: flex;
+  
+
+}
+
+.main .left p{
+    color: white;
+    font-size: 42px;
+    font-family:'Times New Roman', Times, serif;
+    font-weight: 1px solid ;
+    margin-top: 30%;
+    margin-left: 5%;
+}
+
+
+.right{
+
+    flex: 50%;
+    
+    display: flex;
+   
+
+}
+ .image-1{
+
+}

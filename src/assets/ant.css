@@ -1,0 +1,9 @@
+#components-layout-demo-side .logo {
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .site-layout .site-layout-background {
+    background: linear-gradient(90deg, rgba(9,9,61,1) 99%, rgba(9,9,121,1) 100%, rgba(4,2,37,1) 100%, rgba(3,3,106,1) 100%);
+  }
