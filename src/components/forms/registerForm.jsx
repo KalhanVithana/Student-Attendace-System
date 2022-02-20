@@ -15,15 +15,10 @@ import { useDispatch } from "react-redux";
 
 const { Option } = Select;
 
-export default function registerForm() {
+export default function RegisterForm() {
   const dispatch = useDispatch();
   const onFinish = (values) => {
     dispatch(signUpUser(values));
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
   };
 
   return (
@@ -38,7 +33,6 @@ export default function registerForm() {
           wrapperCol={{ span: 16 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <Form.Item
@@ -52,7 +46,7 @@ export default function registerForm() {
           </Form.Item>
 
           <Form.Item
-            label="email"
+            label="Email"
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
@@ -60,7 +54,7 @@ export default function registerForm() {
           </Form.Item>
 
           <Form.Item
-            label="gender"
+            label="Gender"
             name="gender"
             rules={[{ required: true, message: "Please input your Gender!" }]}
           >

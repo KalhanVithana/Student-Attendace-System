@@ -18,13 +18,8 @@ export default function EnrollCourse() {
       headers: { "x-auth": token },
     });
 
-    console.log(Resdata);
     setDataArr(Resdata.data);
   }, []);
-
-  dataArr.map((res) => {
-    console.log(res);
-  });
 
   const OptionArray = (
     <>
@@ -35,16 +30,12 @@ export default function EnrollCourse() {
   );
 
   const onFinish = (values) => {
-    console.log("Success:", values);
+    console.log("calu",values)
     dispatch(enrollCourseList(values));
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
   return (
     <div style={{ textAlign: "center", alignItems: "center" }}>
-     
       <Card
         title="Enroll Course"
         style={{ width: 300, marginLeft: "30%", marginTop: "5rem" }}
@@ -55,11 +46,10 @@ export default function EnrollCourse() {
           wrapperCol={{ span: 16 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <Form.Item
-            label="course"
+            label="Class ID"
             name="classId"
             rules={[{ required: true, message: "Please input your course!" }]}
           >

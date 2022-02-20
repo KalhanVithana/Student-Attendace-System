@@ -17,25 +17,7 @@ import {
   SUCCESS_USER_UPDATE_DATA,
 } from "./constants";
 import { notification } from "antd";
-const openNotificationWithIcon = (type) => {
-  if (type === "update") {
-    notification["success"]({
-      message: "update sucesfully",
-    });
-  } else if (type === "signIn") {
-    {
-      notification["success"]({
-        message: "  sign In sucessfully",
-      });
-    }
-  } else if (type === "signUP") {
-    {
-      notification["success"]({
-        message: "  sign Up sucessfully",
-      });
-    }
-  }
-};
+import { responseMiddleware } from "../../../middleware/notification";
 
 export const signUpUser = (data) => async (dispatch) => {
   try {
@@ -48,34 +30,29 @@ export const signUpUser = (data) => async (dispatch) => {
       data
     );
 
-    console.log(data);
-
     dispatch({ type: SUCCESS_SIGNUP, payload: resData });
-    openNotificationWithIcon("signUP");
+    responseMiddleware("signUP");
   } catch (e) {
-    console.log("error", e);
     dispatch({ type: ERROR_SIGNUP, payload: e });
+    responseMiddleware("", e.response.data.msg);
   }
 };
 
 export const LoginUser = (data) => async (dispatch) => {
   try {
-    console.log("data users", data);
-
     dispatch({ type: REQUERST_LOGIN });
 
     dispatch({ type: LOAD_LOGIN });
 
     const resData = await axios.post("http://localhost:4000/user/login", data);
 
-    console.log(resData);
     localStorage.setItem("x-auth", resData.data.token);
 
     dispatch({ type: SUCCESS_LOGIN, payload: resData });
-    openNotificationWithIcon("signIn");
+    responseMiddleware("signIn");
   } catch (e) {
-    console.log("error", e);
     dispatch({ type: ERROR_LOGIN, payload: e });
+    responseMiddleware("", e.response.data.msg);
   }
 };
 
@@ -94,12 +71,9 @@ export const UpdateUser = (data) => async (dispatch) => {
       }
     );
 
-    console.log(resData);
-
     dispatch({ type: SUCCESS_USER_UPDATE_DATA, payload: resData });
-    openNotificationWithIcon("update");
+    responseMiddleware("update");
   } catch (e) {
-    console.log("error", e);
     dispatch({ type: ERROR_USER_UPDATE_DATA, payload: e });
   }
 };

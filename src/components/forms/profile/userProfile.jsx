@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UpdateUser } from "../../Redux/action/signAction";
 
-export default function userProfile() {
+export default function UserProfile() {
   const location = useLocation();
   const { role } = location.state;
   const [userId, setUserId] = useState("");
@@ -17,8 +17,6 @@ export default function userProfile() {
   useEffect(async () => {
     const token = localStorage.getItem("x-auth");
 
-    console.log(token);
-
     const userRes = await axios.post(
       "http://localhost:4000/user/uid",
       { role },
@@ -26,12 +24,13 @@ export default function userProfile() {
     );
 
     setUserId(userRes.data);
-    console.log("get", userRes.data);
+    console.log(userRes.data)
+
     form.setFieldsValue({
       name: userRes.data.name,
       email: userRes.data.email,
       gender: userRes.data.gender,
-     
+      instructorId: userRes.data.instructorId,
     });
   }, []);
 
@@ -42,12 +41,10 @@ export default function userProfile() {
       name: values.name,
       email: values.email,
       gender: values.gender,
-      role:role
-      
+      role: role,
     };
 
     dispatch(UpdateUser(value));
-   
   };
 
   return (
@@ -75,15 +72,26 @@ export default function userProfile() {
             <Input style={{ marginLeft: 4 }} />
           </Form.Item>
 
+          {role === 'lecture' ? 
+           <Form.Item
+           label="Instructor Id"
+           name="instructorId"
+           rules={[
+             { required: true, message: "Please input your user instructor ID!" },
+           ]}
+         >
+           <Input style={{ marginLeft: 4 }}  disabled/>
+         </Form.Item> :null}
+
           <Form.Item
             label="Email"
             name="email"
             rules={[{ required: true, message: "Please input your  email!" }]}
           >
-            <Input style={{ marginLeft: 4 }} />
+            <Input style={{ marginLeft: 4 }}  />
           </Form.Item>
           <Form.Item
-            label="gender"
+            label="Gender"
             name="gender"
             rules={[{ required: true, message: "Please input your Gender!" }]}
           >

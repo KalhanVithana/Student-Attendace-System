@@ -1,10 +1,14 @@
+const { Timeline } = require('antd');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
+const {ObjectId} = mongoose.Schema.Types
 
 let lecSession = new Schema({
     classId: {
     type: String
   },
+  
    lecDate:{
     type:[String]
   },
@@ -17,7 +21,7 @@ let lecSession = new Schema({
     type: String
   },
 
-  department:{
+  courseName:{
 
     type: String
   },
@@ -29,6 +33,14 @@ let lecSession = new Schema({
   lecturerID :{
 
     type: String
+  },
+  attendance :{
+            type:[Array],
+            timestamps: true               
+  },
+  enableCourse :{
+    type: Boolean,
+    default:0
   }
 
 

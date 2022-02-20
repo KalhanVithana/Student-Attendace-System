@@ -12,7 +12,6 @@ export default function LoginForm(props) {
 
   const { auth } = userLogin;
 
-  console.log("auth", auth);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,13 +24,9 @@ export default function LoginForm(props) {
 
   const dispatch = useDispatch();
   const onFinish = (values) => {
-    console.log("Success:", values);
     dispatch(LoginUser(values));
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
   return (
     <div style={{ textAlign: "center", alignItems: "center" }}>
       <Card
@@ -44,11 +39,10 @@ export default function LoginForm(props) {
           wrapperCol={{ span: 16 }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <Form.Item
-            label="email"
+            label="Email"
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >

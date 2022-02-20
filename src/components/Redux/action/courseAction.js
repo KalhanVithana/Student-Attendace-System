@@ -13,47 +13,22 @@ import {
   SUCCESS_SESSION_DATA,
   SUCCESS_SESSION_DATA_UPDATE,
 } from "./constants";
-import { notification, Spin } from "antd";
-
-const openNotificationWithIcon = (type) => {
-  console.log("type", type);
-  if (type === "update") {
-    notification["success"]({
-      message: "update sucessfully",
-    });
-  } else if (type === "enroll") {
-    {
-      notification["success"]({
-        message: "  enroll sucessfully",
-      });
-    }
-  } else if (type === "addsession") {
-    {
-      notification["success"]({
-        message: "  adds ession sucessfully",
-      });
-    }
-  }
-};
+import { responseMiddleware } from "../../../middleware/notification";
 
 export const AddSessionList = (data) => async (dispatch) => {
   try {
     const token = localStorage.getItem("x-auth");
     dispatch({ type: REQUERST_SESSION });
-
     dispatch({ type: LOAD_SESSION });
 
     const resData = await axios.post("http://localhost:4000/user/add", data, {
       headers: { "x-auth": token },
     });
-
-    console.log(data);
-
     dispatch({ type: SUCCESS_SESSION, payload: resData });
-    openNotificationWithIcon("addsession");
+    responseMiddleware("addsession");
   } catch (e) {
-    console.log("error", e);
     dispatch({ type: ERROR_SESSION, payload: e });
+    responseMiddleware("", e.response.data.msg);
   }
 };
 
@@ -69,10 +44,10 @@ export const enrollCourseList = (data) => async (dispatch) => {
     });
 
     dispatch({ type: SUCCESS_SESSION, payload: resData });
-    openNotificationWithIcon("enroll");
+    responseMiddleware("enroll");
   } catch (e) {
-    console.log("error", e);
     dispatch({ type: ERROR_SESSION, payload: e });
+    responseMiddleware("", e.response.data.msg);
   }
 };
 
@@ -92,8 +67,6 @@ export const getSessionList = (role) => async (dispatch) => {
         }
       );
 
-      console.log(resData.data);
-
       dispatch({ type: SUCCESS_SESSION_DATA, payload: resData.data });
     } else if (role === "student") {
       dispatch({ type: REQUERST_SESSION_DATA });
@@ -104,12 +77,9 @@ export const getSessionList = (role) => async (dispatch) => {
         headers: { "x-auth": token },
       });
 
-      console.log(resData.data);
-
       dispatch({ type: SUCCESS_SESSION_DATA, payload: resData.data });
     }
   } catch (e) {
-    console.log("error", e);
     dispatch({ type: ERROR_SESSION_DATA, payload: e });
   }
 };
@@ -128,13 +98,14 @@ export const updateSession = (data) => async (dispatch) => {
         headers: { "x-auth": token },
       }
     );
-
-    console.log(resData.data);
+    
 
     dispatch({ type: SUCCESS_SESSION_DATA_UPDATE, payload: resData.data });
-    openNotificationWithIcon("update");
+    
+   
+
+    responseMiddleware("sessionUpdate");
   } catch (e) {
-    console.log("error", e);
     dispatch({ type: ERROR_SESSION_DATA_UPDATE, payload: e });
   }
 };

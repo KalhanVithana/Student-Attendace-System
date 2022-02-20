@@ -9,6 +9,10 @@ let lecturer = new Schema({
     type: String
   },
 
+   instructorId:{
+    type: String
+   },
+
   department:{
     type: String
   },

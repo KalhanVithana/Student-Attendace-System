@@ -23,10 +23,8 @@ export default function AddSession() {
   const location = useLocation();
   const { role } = location.state;
 
-
   const dispatch = useDispatch();
   const onFinish = (values) => {
-    console.log("Success:", values);
     dispatch(AddSessionList(values));
   };
 
@@ -40,7 +38,7 @@ export default function AddSession() {
   return (
     <div style={{ textAlign: "center", alignItems: "center" }}>
       <Card
-        title="Add session"
+        title="Add Session"
         style={{ width: 300, marginLeft: "30%", marginTop: "5rem" }}
       >
         <Form
@@ -53,7 +51,7 @@ export default function AddSession() {
           autoComplete="off"
         >
           <Form.Item
-            label="session ID"
+            label="Class ID"
             name="classId"
             rules={[
               { required: true, message: "Please input your session ID!" },
@@ -63,26 +61,26 @@ export default function AddSession() {
           </Form.Item>
 
           <Form.Item
-            label="department"
-            name="department"
+            label="Course ID"
+            name="courseName"
             rules={[
-              { required: true, message: "Please input your department !" },
+              { required: true, message: "Please input your courseName !" },
             ]}
-            
           >
-            <Input style={{marginLeft:2}}/>
+            <Input/>
           </Form.Item>
 
           <Form.Item
-            label="start Date"
+            label="Date "
             name="lecDate"
             rules={[
               { required: true, message: "Please input your  session date!" },
             ]}
           >
-            <RangePicker />
+            <DatePicker style={{right:7}} />
           </Form.Item>
 
+        
           <Form.Item
             label="Time "
             name="lecTime"

@@ -25,12 +25,16 @@ router.route("/register").post(async (req, res) => {
 
       const passwordhash = await bcrypt.hash(password, salt);
       console.log(passwordhash);
+      let  userID = 'Ins'
+      let randomstring = Math.floor(Math.random() * (1000 - 100) + 100) / 100;
+      let genarateId = userID.concat(randomstring)
 
       let NewUser = new lectureSchema({
         name,
         email,
         gender,
         role: "lecture",
+        instructorId:genarateId,
         password: passwordhash,
       });
 
@@ -116,7 +120,8 @@ router.route("/login").post(async (req, res) => {
 
 router.route("/up").put(auth, async (req, res) => {
   try {
-    const { classId, enroll } = req.body;
+    const { classId, enroll,courseName } = req.body;
+
 
     const findCourseId = await lecSession.findOne({ classId: classId });
 
@@ -127,9 +132,7 @@ router.route("/up").put(auth, async (req, res) => {
       enroll: req.user,
     });
 
-    let checkEnroll = findCourseId.enroll.includes(req.user);
-
-    if (checkEnroll) return res.status(400).json({ msg: "alredy exsist" });
+  
 
     const UpdateData = await lecSession.findOneAndUpdate(
       { classId: classId },
@@ -146,20 +149,18 @@ router.route("/up").put(auth, async (req, res) => {
 
 router.route("/add").post(auth, async (req, res) => {
   try {
-    const { classId, lecDate, lecTime,department } = req.body;
+    const { classId, lecDate, lecTime, courseName } = req.body;
 
     const findCourseId = await lecSession.findOne({ classId: classId });
 
-    console.log(findCourseId);
-
     if (findCourseId)
-      return res.status(401).json({ msg: "  course alredy exist" });
-
+    return res.status(401).json({ msg: " Class Id already exsist" });
+   
     const SaveCourse = new lecSession({
       classId,
       lecDate,
       lecTime,
-      department,
+      courseName,
       lecturerID: req.user,
     });
 
@@ -198,7 +199,7 @@ router.route("/get/session").get(auth, async (req, res) => {
 });
 
 router.route("/session/up").put(auth, async (req, res) => {
-  const { classId, lecDate, lecTime,department } = req.body;
+  const { classId, lecDate, lecTime, courseName } = req.body;
 
   const sessionUpdate = await lecSession.findOneAndUpdate(
     { classId: classId },
@@ -206,12 +207,13 @@ router.route("/session/up").put(auth, async (req, res) => {
       $set: {
         lecDate: lecDate,
         lecTime: lecTime,
-        department:department
+        courseName:courseName
       },
     },
     { new: true }
   );
   res.json(sessionUpdate);
+  console.log(sessionUpdate)
 });
 
 router.route("/get/std").get(auth, async (req, res) => {
@@ -262,4 +264,51 @@ router.route("/get/update").put(auth, async (req, res) => {
   }
 });
 
+router.route("/at").put(auth, async (req, res) => {
+  const { classId } = req.body;
+  console.log("classId",classId)
+
+  const findStudent = await studentSchema.findById(req.user);
+
+  const { name, email } = findStudent;
+  const date = new Date();
+
+  let time = date.toISOString();
+  const stdAttendace = {
+    name,
+    email,
+    time,
+  };
+
+  const user = await lecSession.findOneAndUpdate(
+    { classId: classId },
+    { $push: { attendance: stdAttendace } },
+    { new: true }
+  );
+  res.json(user);
+});
+
+router.route("/en").put(auth, async (req, res) => {
+  try {
+    const { id, value } = req.body;
+    console.log("classID", id);
+    console.log("value", value);
+
+    let classID = await lecSession.findOneAndUpdate(
+      { classId: id },
+      {
+        $set: {
+          enableCourse: value,
+        },
+      },
+      { new: true }
+    );
+
+    console.log(classID);
+
+    res.json(classID);
+  } catch (e) {
+    console.log(e);
+  }
+});
 module.exports = router;

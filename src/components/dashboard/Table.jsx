@@ -2,8 +2,23 @@ import {
   VideoCameraOutlined,
   DeleteOutlined,
   EditOutlined,
+  PieChartTwoTone,
+  CheckOutlined,
+  CloseOutlined,
+  PicCenterOutlined,
+  FilePdfOutlined,
 } from "@ant-design/icons";
-import { Input, Modal, Table, DatePicker, TimePicker, Typography } from "antd";
+import {
+  Input,
+  Modal,
+  Table,
+  DatePicker,
+  TimePicker,
+  Typography,
+  List,
+  Switch,
+  Button,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -11,6 +26,8 @@ import { getSessionList, updateSession } from "../Redux/action/courseAction";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 const { RangePicker } = DatePicker;
 import { Spin } from "antd";
 
@@ -20,46 +37,51 @@ export default function TableUser() {
   );
   const sessionData = useSelector((state) => state.getSessionReducers);
   const [EditModel, setEditModel] = useState(false);
+  const [attendaceChart, setAttendanceChart] = useState(false);
   const [editSession, setEditSession] = useState(null);
+  const [dataArr, setDataArr] = useState([]);
+  const [getAttendance, setAttendance] = useState(null);
   const [sessionUpdate, setSessionUpdate] = useState(
     sessionData ? sessionData.loading : null
   );
+  const [viewModel, setViewModel] = useState(false);
+  const [idClass, setIdClass] = useState("");
   const dispatch = useDispatch();
 
   const location = useLocation();
   const { role } = location.state;
 
-  console.log(TableData);
   const dateFormat = "YYYY/MM/DD";
   const timeFormat = "HH:mm:ss";
+  const token = localStorage.getItem("x-auth");
 
   const columns = [
     {
-      title: "classId",
+      title: "Class ID",
       dataIndex: "classId",
       key: "classId",
       fixed: "left",
       sorter: (a, b) => a.classId - b.classId,
     },
     {
-      title: "department",
-      dataIndex: "department",
-      key: "department",
+      title: "Course ID",
+      dataIndex:"courseName",
+      key: "courseName",
     },
     {
-      title: "lecDate",
+      title: "Lecture Date",
       dataIndex: "lecDate",
       key: "lecDate",
       render: (text, row) => (
-        <RangePicker
-          value={[moment(text[0]), moment(text[1])]}
+        <DatePicker
+          value={moment(text[1])}
           format={dateFormat}
           disabled
         />
       ),
     },
     {
-      title: "lecTime",
+      title: "Lecture Time",
       dataIndex: "lecTime",
       key: "lecTime",
       render: (text, row) => (
@@ -72,6 +94,29 @@ export default function TableUser() {
     },
 
     {
+      title: role === "lecture" ? "Session" : null,
+      fixed: "right",
+      key: "session",
+      render:
+        role === "lecture"
+          ? (record) => {
+              return (
+                <div>
+                  <Switch
+                    checkedChildren={<CheckOutlined />}
+                    unCheckedChildren={<CloseOutlined />}
+                    onClick={(e) => {
+                      enableCourse(record, e);
+                    }}
+                    defaultChecked={record.enableCourse}
+                  />
+                </div>
+              );
+            }
+          : null,
+    },
+
+    {
       title: "Action",
       key: "operation",
       fixed: "right",
@@ -81,6 +126,12 @@ export default function TableUser() {
           <div style={{ display: "flex" }}>
             {role === "lecture" ? (
               <>
+                <PieChartTwoTone
+                  style={{ color: "", marginRight: 12 }}
+                  onClick={() => {
+                    onAttendaceChart(record);
+                  }}
+                />
                 <EditOutlined
                   onClick={() => {
                     onEdit(record);
@@ -94,8 +145,20 @@ export default function TableUser() {
                   }}
                 />
               </>
+            ) : record.enableCourse ? (
+              <>
+                <Button
+                  type="primary"
+                  danger
+                  onClick={() => {
+                    AttendCourse(record);
+                  }}
+                > Join</Button>
+              </>
             ) : (
-              <VideoCameraOutlined />
+              <Button  diabled>
+                Not started yet
+              </Button>
             )}
           </div>
         );
@@ -107,20 +170,50 @@ export default function TableUser() {
     dispatch(getSessionList(role));
   }, [dispatch]);
 
+  useEffect(() => {}, [dataArr]);
+
+  const enableCourse = async (obj, value) => {
+    const id = obj.classId;
+
+    const Course = {
+      id,
+      value,
+    };
+
+    await axios.put("http://localhost:4000/user/en", Course, {
+      headers: { "x-auth": token },
+    });
+  };
+
+
   const onEdit = (obj) => {
     setEditModel(true);
+
+    console.log("objex",obj)
     setEditSession({ ...obj });
   };
 
+  const AttendCourse = async (obj) => {
+    setViewModel(true)
+    const classId = obj._id;
+    await axios.put(
+      "http://localhost:4000/user/at",
+      { classId },
+      {
+        headers: { "x-auth": token },
+      }
+    );
+  };
+
   function onChangeDate(date, dateString) {
-    console.log(date, dateString);
+ 
 
     setEditSession((pre) => {
       return { ...pre, lecDate: date };
     });
   }
   function onChangeTime(time, timeString) {
-    console.log(time, timeString);
+  
     setEditSession((pre) => {
       return { ...pre, lecTime: time };
     });
@@ -133,16 +226,19 @@ export default function TableUser() {
     setEditModel(false);
   };
 
+  const onAttendaceChart = (obj) => {
+    setIdClass(obj.classId);
+    setAttendanceChart(true);
+    setAttendance({ ...obj });
+  };
+
   const ondelete = async (record) => {
-    const token = await localStorage.getItem("x-auth");
 
     Modal.confirm({
       title: `are you sure,do you want to delete `,
       okText: "yes",
       okType: "danger",
       onOk: async () => {
-        console.log("deleted", record._id);
-
         const id = record._id;
 
         await axios
@@ -152,11 +248,49 @@ export default function TableUser() {
           .then((res) => {
             console.log(res.data);
           });
+
+          dispatch(getSessionList(role));
       },
     });
   };
 
-  console.log("new", editSession);
+  const generatePDF = (obj) => {
+    const unit = "pt";
+
+    const size = "A3";
+
+    const orientation = "landscape";
+
+    const marginLeft = 40;
+
+    const doc = new jsPDF(orientation, unit, size);
+
+    const title = "Student Attendance  ";
+
+    const headers = [["Student Name", "email", "Attendance"]];
+
+    const PDF = obj.map((obj) => [
+      obj.name,
+      obj.email,
+      moment(obj.time, timeFormat).toString().replace(" GMT+0530", ""),
+    ]);
+
+    let content = {
+      startY: 50,
+
+      head: headers,
+
+      body: PDF,
+    };
+
+    doc.setFontSize(20);
+
+    doc.text(title, marginLeft, 40);
+
+    doc.autoTable(content);
+
+    doc.save("Attentdance.pdf");
+  };
 
   return (
     <div>
@@ -172,10 +306,11 @@ export default function TableUser() {
             }}
             onOk={() => {
               const data = {
+                id:editSession?._id,
                 classId: editSession?.classId,
                 lecDate: editSession?.lecDate,
                 lecTime: editSession?.lecTime,
-                department:editSession?.department
+                courseName: editSession?.courseName,
               };
               editData(data);
             }}
@@ -186,32 +321,35 @@ export default function TableUser() {
               </Typography.Text>
               <Input
                 value={editSession?.classId}
-                disabled
                 style={{ marginTop: 10 }}
+                disabled
+                
               />
               <Typography.Text style={{ fontWeight: "bold", marginTop: 10 }}>
                 {" "}
-                Department
+                courseName
               </Typography.Text>
 
               <Input
-                value={editSession?.department}
+                value={editSession?.courseName}
                 style={{ marginTop: 10 }}
                 onChange={(e) => {
                   setEditSession((pre) => {
-                    return { ...pre, department: e.target.value };
+                    return { ...pre, courseName: e.target.value };
                   });
                 }}
+            
               />
               <Typography.Text style={{ fontWeight: "bold", marginTop: 10 }}>
                 {" "}
                 session Date
               </Typography.Text>
-              <RangePicker
-                value={[
-                  moment(editSession?.lecDate[0]),
-                  moment(editSession?.lecDate[1]),
-                ]}
+              <DatePicker
+                value={
+                  moment(editSession?.lecDate[0])
+                 
+                 
+                }
                 format={dateFormat}
                 style={{ marginTop: 10 }}
                 onChange={onChangeDate}
@@ -235,6 +373,84 @@ export default function TableUser() {
       ) : (
         <Spin />
       )}
+
+      <Modal
+        title="Student Attendace"
+        visible={attendaceChart}
+        onOk={""}
+        onCancel={() => {
+          setAttendanceChart(false);
+        }}
+      >
+        <List
+          itemLayout="horizontal"
+          dataSource={[getAttendance]}
+          renderItem={(item) => {
+            return (
+              <div>
+                <div style={{ marginLeft: "25rem" }}>
+                  <FilePdfOutlined
+                    style={{ color: "blue", fontSize: "xx-large" }}
+                    diabled
+                    onClick={() => {
+                      let obj = item.attendance.flat().map((res) => res);
+                      generatePDF(obj);
+                    }}
+                  />
+                  <a
+                    onClick={() => {
+                      let obj = item.attendance.flat().map((res) => res);
+                      generatePDF(obj);
+                    }}
+                  >
+                    Download
+                  </a>
+                </div>
+
+                {item.attendance.flat().map((res) => {
+                  let m = moment(res.time, timeFormat).toString();
+                  let attendance = m.replace(" GMT+0530", "");
+
+                  return (
+                    <>
+                      <List.Item>
+                        <List.Item.Meta
+                          title={
+                            <div>
+                              <a>{item.classId}</a>
+                            </div>
+                          }
+                          description={
+                            <div>
+                              <li>{res.name}</li>
+                              <li>{res.email}</li>
+                              <li>{attendance}</li>
+                            </div>
+                          }
+                        />
+                      </List.Item>
+                    </>
+                  );
+                })}
+              </div>
+            );
+          }}
+        />
+      </Modal>
+
+
+      <Modal
+        title="Lecture Room"
+        visible={viewModel}
+        onOk={""}
+        onCancel={() => {
+          setViewModel(false);
+        }}
+      >
+       
+       <h5>Waiting for ....</h5>
+       
+      </Modal>
     </div>
   );
 }

@@ -13,7 +13,7 @@ import TableUser from "./Table";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-export default function adminDashboard({ children }, props) {
+export default function AdminDashboard({ children }, props) {
   const validateUser = useSelector((state) => state.loginReducer);
   const [roleUser, setuserRole] = useState("");
 
@@ -32,10 +32,10 @@ export default function adminDashboard({ children }, props) {
           breakpoint="lg"
           collapsedWidth="0"
           onBreakpoint={(broken) => {
-            console.log(broken);
+            
           }}
           onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
+           
           }}
         >
           <div className="logo" />
@@ -44,11 +44,11 @@ export default function adminDashboard({ children }, props) {
               {roleUser === "student" ? (
                 <Link to="/auth/tdata" state={{ role: roleUser }}>
                   {" "}
-                  student Table
+                  Student Table
                 </Link>
               ) : roleUser === "lecture" ? (
                 <Link to="/auth/tdata" state={{ role: roleUser }}>
-                  lecture Table
+                  Lecture Table
                 </Link>
               ) : roleUser === "admin" ? (
                 <Link to="/auth/admin" state={{ role: roleUser }}>
@@ -61,11 +61,11 @@ export default function adminDashboard({ children }, props) {
               {roleUser === "student" ? (
                 <Link to="/auth/user" state={{ role: roleUser }}>
                   {" "}
-                  student profile
+                  Student Profile
                 </Link>
               ) : roleUser === "lecture" ? (
                 <Link to="/auth/user" state={{ role: roleUser }}>
-                  lecture profile
+                  Lecture Profile
                 </Link>
               ) : null}
             </Menu.Item>
@@ -77,7 +77,7 @@ export default function adminDashboard({ children }, props) {
                 </Link>
               ) : roleUser === "lecture" ? (
                 <Link to="/auth/session" state={{ role: roleUser }}>
-                  add sessions
+                  Add Sessions
                 </Link>
               ) : roleUser === "admin" ? (
                 <Link to="/auth/register" state={{ role: roleUser }}>
