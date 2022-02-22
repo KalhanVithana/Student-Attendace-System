@@ -195,7 +195,7 @@ export default function TableUser() {
 
   const AttendCourse = async (obj) => {
     setViewModel(true)
-    const classId = obj._id;
+    const classId = obj.classId;
     await axios.put(
       "http://localhost:4000/user/at",
       { classId },
@@ -448,7 +448,10 @@ export default function TableUser() {
         }}
       >
        
-       <h5>Waiting for ....</h5>
+      
+       <h5>Waiting Host will be add you soon ....</h5>
+       <Spin size="large" style={{marginLeft:'14rem'}} /> 
+    
        
       </Modal>
     </div>
