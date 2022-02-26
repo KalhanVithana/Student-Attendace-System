@@ -266,14 +266,13 @@ router.route("/get/update").put(auth, async (req, res) => {
 
 router.route("/at").put(auth, async (req, res) => {
   const { classId } = req.body;
-  console.log("classId",classId)
-
+  
   const findStudent = await studentSchema.findById(req.user);
 
   const { name, email } = findStudent;
-  const date = new Date();
+  const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh'});
 
-  let time = date.toISOString();
+  let time = date
   const stdAttendace = {
     name,
     email,
@@ -311,4 +310,7 @@ router.route("/en").put(auth, async (req, res) => {
     console.log(e);
   }
 });
+
+
+
 module.exports = router;

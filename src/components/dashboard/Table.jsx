@@ -272,7 +272,7 @@ export default function TableUser() {
     const PDF = obj.map((obj) => [
       obj.name,
       obj.email,
-      moment(obj.time, timeFormat).toString().replace(" GMT+0530", ""),
+      obj.time
     ]);
 
     let content = {
@@ -377,7 +377,9 @@ export default function TableUser() {
       <Modal
         title="Student Attendace"
         visible={attendaceChart}
-        onOk={""}
+        onOk={() => {
+          setAttendanceChart(false);
+        }}
         onCancel={() => {
           setAttendanceChart(false);
         }}
@@ -408,8 +410,7 @@ export default function TableUser() {
                 </div>
 
                 {item.attendance.flat().map((res) => {
-                  let m = moment(res.time, timeFormat).toString();
-                  let attendance = m.replace(" GMT+0530", "");
+                 
 
                   return (
                     <>
@@ -424,7 +425,7 @@ export default function TableUser() {
                             <div>
                               <li>{res.name}</li>
                               <li>{res.email}</li>
-                              <li>{attendance}</li>
+                              <li>{res.time}</li>
                             </div>
                           }
                         />
@@ -442,7 +443,9 @@ export default function TableUser() {
       <Modal
         title="Lecture Room"
         visible={viewModel}
-        onOk={""}
+        onOk={() => {
+          setViewModel(false);
+        }}
         onCancel={() => {
           setViewModel(false);
         }}

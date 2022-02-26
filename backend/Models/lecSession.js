@@ -36,7 +36,7 @@ let lecSession = new Schema({
   },
   attendance :{
             type:[Array],
-            timestamps: true               
+                        
   },
   enableCourse :{
     type: Boolean,
