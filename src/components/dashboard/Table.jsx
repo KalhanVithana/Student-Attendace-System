@@ -74,7 +74,7 @@ export default function TableUser() {
       key: "lecDate",
       render: (text, row) => (
         <DatePicker
-          value={moment(text[1])}
+          value={moment(text[0])}
           format={dateFormat}
           disabled
         />
@@ -345,7 +345,7 @@ export default function TableUser() {
                 session Date
               </Typography.Text>
               <DatePicker
-                value={
+                defaultValue={
                   moment(editSession?.lecDate[0])
                  
                  
