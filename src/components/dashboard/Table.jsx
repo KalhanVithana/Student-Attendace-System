@@ -28,7 +28,6 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-const { RangePicker } = DatePicker;
 import { Spin } from "antd";
 
 export default function TableUser() {
@@ -74,7 +73,7 @@ export default function TableUser() {
       key: "lecDate",
       render: (text, row) => (
         <DatePicker
-          value={moment(text[0])}
+          defaultValue={moment(text[0])}
           format={dateFormat}
           disabled
         />
