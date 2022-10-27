@@ -15,7 +15,7 @@ export default function AdminTable() {
   const [usersData,setUsersData] = useState([]);
   const [type,setType] = useState();
     const location = useLocation();
-    const { role } = location.state
+    const { role } = "location.state"
     const columns = [
         {
           title: "name",

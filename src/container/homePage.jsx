@@ -8,6 +8,8 @@ import { Layout, Menu, Breadcrumb,Row,Col } from 'antd';
 import { Link } from 'react-router-dom';
 import LoginForm from '../components/forms/login';
 import RegisterForm from '../components/forms/registerForm';
+import UserProfile from '../components/forms/profile/userProfile';
+import AdminTable from '../components/dashboard/adminTable/adminTable';
 const { Header, Content, Footer } = Layout;
 
 
@@ -48,6 +50,8 @@ export default function HomePage() {
 
         {key === '1' ?  <LoginForm/> : key === '2' ? <RegisterForm/> :null}
       </div>
+       {/* <UserProfile/> */}
+       {/* <AdminTable/> */}
        
    
     </Content>

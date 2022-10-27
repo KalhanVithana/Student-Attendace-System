@@ -10,7 +10,7 @@ export default function UserProfile(props) {
 
 
   const location = useLocation();
-  const { role } = location.state;
+  const { role } = "location.state";
   const [userId, setUserId] = useState("");
   const [form] = Form.useForm();
 
