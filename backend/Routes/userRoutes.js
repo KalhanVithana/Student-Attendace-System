@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 //  Model
 let studentSchema = require("../Models/studentModel");
 let lectureSchema = require("../Models/lecturerModel");
+let adminSchema = require("../Models/adminModel");
 let lecSession = require("../Models/lecSession");
 const auth = require("../middleware/auth");
 
@@ -14,9 +15,10 @@ router.route("/register").post(async (req, res) => {
   try {
     const { name, email, gender, password } = req.body;
 
-    let Role = email.includes("@lec.com");
+    let lecture = email.includes("@lec.com");
+    let admin = email.includes("@admin.com");
 
-    if (Role) {
+    if (lecture) {
       const existingUser = await lectureSchema.findOne({ email: email });
       if (existingUser) {
         return res.status(400).json({ msg: `user alreay exists  ` });
@@ -37,12 +39,41 @@ router.route("/register").post(async (req, res) => {
         instructorId:genarateId,
         password: passwordhash,
       });
-
       const saveUser = await NewUser.save();
 
-      res.json(saveUser);
       console.log(saveUser);
-    } else {
+      return res.json(saveUser);
+    }if(admin){
+
+      const existingUser = await adminSchema.findOne({ email: email });
+      if (existingUser) {
+        return res.status(400).json({ msg: `user alreay exists  ` });
+      }
+      const salt = await bcrypt.genSalt();
+
+      const passwordhash = await bcrypt.hash(password, salt);
+      console.log(passwordhash);
+      let  userID = 'Ins'
+      let randomstring = Math.floor(Math.random() * (1000 - 100) + 100) / 100;
+      let genarateId = userID.concat(randomstring)
+
+      let NewUser = new adminSchema({
+        name,
+        email,
+        gender,
+        role: "admin",
+        instructorId:genarateId,
+        password: passwordhash,
+      });
+
+      const saveUser = await NewUser.save();
+      console.log(saveUser);
+     return res.json(saveUser);
+      
+
+    }
+    
+    else {
       const existingUser = await studentSchema.findOne({ email: email });
       if (existingUser) {
         return res.status(400).json({ msg: `user alreay exists  ` });
@@ -61,9 +92,8 @@ router.route("/register").post(async (req, res) => {
       });
 
       const saveUser = await NewUser.save();
-
-      res.json(saveUser);
       console.log(saveUser);
+      return res.json(saveUser);
     }
   } catch (err) {
     res.status(500).json(err);
@@ -74,9 +104,10 @@ router.route("/login").post(async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    let Role = email.includes("@lec.com");
+    let lecture = email.includes("@lec.com");
+    let admin = email.includes("@admin.com");
 
-    if (Role) {
+    if (lecture) {
       const user = await lectureSchema.findOne({ email: email });
       if (!user) {
         return res.status(400).json({ msg: `No User existing in this email ` });
@@ -94,7 +125,27 @@ router.route("/login").post(async (req, res) => {
           role: user.role,
         },
       });
-    } else {
+    } if (admin) {
+      const user = await adminSchema.findOne({ email: email });
+      if (!user) {
+        return res.status(400).json({ msg: `No User existing in this email ` });
+      }
+      const ismatch = await bcrypt.compare(password, user.password);
+      if (!ismatch) {
+        return res.status(400).json({ msg: "email or password invalid " });
+      }
+
+      const token = jwt.sign({ id: user._id }, "#123");
+      res.json({
+        token,
+        user: {
+          id: user._id,
+          role: user.role,
+        },
+      });
+    } 
+    
+    else {
       const user = await studentSchema.findOne({ email: email });
       if (!user) {
         return res.status(400).json({ msg: `No User existing in this email ` });
@@ -185,7 +236,13 @@ router.route("/uid").post(auth, async (req, res) => {
       let user = await lectureSchema.findById(req.user);
 
       res.json(user);
-    } else {
+    }else if (role === "admin") {
+      let user = await adminSchema.findById(req.user);
+
+      res.json(user);
+    } 
+    
+    else {
       res.json("null");
     }
   } catch (e) {
@@ -221,6 +278,7 @@ router.route("/get/std").get(auth, async (req, res) => {
   res.json(userIDData);
 });
 
+
 router.route("/get/all").get(auth, (req, res) => {
   lecSession.find((err, data) => {
     if (err) {
@@ -230,6 +288,33 @@ router.route("/get/all").get(auth, (req, res) => {
     }
   });
 });
+
+
+router.route("/get/users").get((req, res) => {
+  console.log(req.query);
+  if(req.query.role == 'lecture'){
+    console.log("user");
+    lectureSchema.find((err, data) => {
+      if (err) {
+        return next(err);
+      } else {
+        console.log(data);
+        res.json(data);
+      }
+    });
+  }
+  else {
+    studentSchema.find((err, data) => {
+      if (err) {
+        return next(err);
+      } else {
+        res.json(data);
+      }
+    });
+  }
+ 
+});
+
 
 router.route("/get/delete").delete(async (req, res) => {
   try {

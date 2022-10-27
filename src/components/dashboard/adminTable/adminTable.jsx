@@ -1,40 +1,52 @@
-import { Input, Modal, Table, DatePicker, TimePicker, Typography } from "antd";
-import React from "react";
+import { Input, Modal, Table, DatePicker, TimePicker, Typography ,Radio, Button} from "antd";
+import React, { useEffect, useState } from "react";
 import { VideoCameraOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
+import "jspdf-autotable";
+import jsPDF from "jspdf";
+
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY/MM/DD";
 const timeFormat = "HH:mm:ss";
 export default function AdminTable() {
 
+  const [usersData,setUsersData] = useState([]);
+  const [type,setType] = useState();
     const location = useLocation();
     const { role } = location.state
     const columns = [
         {
-          title: "classId",
-          dataIndex: "classId",
-          key: "classId",
+          title: "name",
+          dataIndex: "name",
+          key: "name",
           fixed: "left",
         },
         {
-          title: "lecDate",
-          dataIndex: "lecDate",
-          key: "lecDate",
-         
+          title: "Email",
+          dataIndex: "email",
+          key: "email",
+          fixed: "left",
         },
         {
-          title: "lecTime",
-          dataIndex: "lecTime",
-          key: "lecTime",
+          title: "gender",
+          dataIndex: "gender",
+          key: "gender",
          
         },
-        {
-          title: "department",
-          dataIndex: "department",
-          key: "department",
+        // {
+        //   title: "lecTime",
+        //   dataIndex: "lecTime",
+        //   key: "lecTime",
          
-        },
+        // },
+        // {
+        //   title: "department",
+        //   dataIndex: "department",
+        //   key: "department",
+         
+        // },
     
         {
           title: "Action",
@@ -65,18 +77,63 @@ export default function AdminTable() {
       ];
     
 
-  const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i,
-      name: `Edward King ${i}`,
-      age: 32,
-      address: `London, Park Lane no. ${i}`,
-    });
-  }
+       useEffect(async()=>{
+        const userRes =  await axios.get(
+          `http://localhost:4000/user/get/users?role=${type}`,
+          
+        );
+        setUsersData(userRes.data)
+        console.log("userRes",userRes.data);
+       },[type])
+
+       const generatePDF = (obj) => {
+        const unit = "pt";
+    
+        const size = "A3";
+    
+        const orientation = "landscape";
+    
+        const marginLeft = 40;
+    
+        const doc = new jsPDF(orientation, unit, size);
+    
+        const title = "Users Report  ";
+    
+        const headers = [["Name", "email", "gender"]];
+    
+        const PDF = obj.map((obj) => [
+          obj.name,
+          obj.email,
+          obj.gender
+        ]);
+    
+        let content = {
+          startY: 50,
+    
+          head: headers,
+    
+          body: PDF,
+        };
+    
+        doc.setFontSize(20);
+    
+        doc.text(title, marginLeft, 40);
+    
+        doc.autoTable(content);
+    
+        doc.save("userReport.pdf");
+      };
+ 
+      
+
   return (
     <div>
-      <Table columns={columns} dataSource={data} />
+          <Radio.Group onChange={(e)=> setType(e.target.value)}>
+              <Radio value={"student"}>Student</Radio>
+              <Radio value={"lecture"}> Lecture</Radio>
+            </Radio.Group>
+<Button onClick={(e)=>generatePDF(usersData)  }>download report</Button>
+      <Table columns={columns} dataSource={usersData} />
     </div>
   );
 }

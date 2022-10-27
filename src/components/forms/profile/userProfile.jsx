@@ -6,7 +6,9 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UpdateUser } from "../../Redux/action/signAction";
 
-export default function UserProfile() {
+export default function UserProfile(props) {
+
+
   const location = useLocation();
   const { role } = location.state;
   const [userId, setUserId] = useState("");
@@ -62,6 +64,37 @@ export default function UserProfile() {
           onFinish={onFinish}
           autoComplete="off"
         >
+
+      {role === 'lecture' ? 
+           <Form.Item
+           label="Instructor Id"
+           name="instructorId"
+           rules={[
+             { required: true, message: "Please input your user instructor ID!" },
+           ]}
+         >
+           <Input style={{ marginLeft: 4 }}  disabled/>
+         </Form.Item> :role === 'admin' ? 
+           <Form.Item
+           label="Instructor Id"
+           name="instructorId"
+           rules={[
+             { required: true, message: "Please input your user instructor ID!" },
+           ]}
+         >
+           <Input style={{ marginLeft: 4 }}  disabled/>
+         </Form.Item> :
+         
+         <Form.Item
+         label="Admin Id"
+         name="instructorId"
+         rules={[
+           { required: true, message: "Please input your user instructor ID!" },
+         ]}
+       >
+         <Input style={{ marginLeft: 4 }}  disabled/>
+       </Form.Item>}
+
           <Form.Item
             label=" User Name"
             name="name"
@@ -72,17 +105,7 @@ export default function UserProfile() {
             <Input style={{ marginLeft: 4 }} />
           </Form.Item>
 
-          {role === 'lecture' ? 
-           <Form.Item
-           label="Instructor Id"
-           name="instructorId"
-           rules={[
-             { required: true, message: "Please input your user instructor ID!" },
-           ]}
-         >
-           <Input style={{ marginLeft: 4 }}  disabled/>
-         </Form.Item> :null}
-
+      
           <Form.Item
             label="Email"
             name="email"

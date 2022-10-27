@@ -67,10 +67,14 @@ export default function AdminDashboard({ children }, props) {
                 <Link to="/auth/user" state={{ role: roleUser }}>
                   Lecture Profile
                 </Link>
-              ) : null}
+              ) : roleUser === "admin" ? (
+                <Link to="/auth/user" state={{ role: roleUser }}>
+                  admin Profile
+                </Link>
+              ) :null}
             </Menu.Item>
 
-            <Menu.Item key="3" icon={<VideoCameraOutlined />}>
+            {roleUser === "admin" ? null : (  <Menu.Item key="3" icon={<VideoCameraOutlined />}>
               {roleUser === "student" ? (
                 <Link to="/auth/enroll" state={{ role: roleUser }}>
                   Enroll Course
@@ -84,7 +88,9 @@ export default function AdminDashboard({ children }, props) {
                   Add User
                 </Link>
               ) : null}
-            </Menu.Item>
+            </Menu.Item>) }
+
+          
 
             <Menu.Item key="9" icon={<VideoCameraOutlined />}>
               <Link
