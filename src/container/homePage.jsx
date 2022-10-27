@@ -13,7 +13,7 @@ const { Header, Content, Footer } = Layout;
 
 
 
-export default function homePage() {
+export default function HomePage() {
   const [key,setkey] = useState('1');
 
   
