@@ -20,6 +20,11 @@ router.route("/register").post(async (req, res) => {
 
     let lecture = email.includes("@lec.com");
     let admin = email.includes("@admin.com");
+    console.log("password",password);
+
+    if(password.length < 5) {
+      return res.status(400).json({ msg: `Password should be more than 5` });
+    }
 
     if (lecture) {
       const existingUser = await lectureSchema.findOne({ email: email });
@@ -30,8 +35,8 @@ router.route("/register").post(async (req, res) => {
 
       const passwordhash = await bcrypt.hash(password, salt);
       console.log(passwordhash);
-      let userID = "Ins";
-      let randomstring = Math.floor(Math.random() * (1000 - 100) + 100) / 100;
+      let userID = "IHM";
+      let randomstring = Math.floor(Math.random() * 1000 *100);
       let genarateId = userID.concat(randomstring);
 
       let NewUser = new lectureSchema({
@@ -56,7 +61,7 @@ router.route("/register").post(async (req, res) => {
 
       const passwordhash = await bcrypt.hash(password, salt);
       console.log(passwordhash);
-      let userID = "Ins";
+      let userID = "IHM";
       let randomstring = Math.floor(Math.random() * (1000 - 100) + 100) / 100;
       let genarateId = userID.concat(randomstring);
 
@@ -81,9 +86,11 @@ router.route("/register").post(async (req, res) => {
 
       const passwordhash = await bcrypt.hash(password, salt);
       console.log(passwordhash);
-      let userID = "Ins";
+      let userID = "IHM";
       let randomstring = Math.floor(Math.random() * (1000 - 100) + 100) / 100;
       let genarateId = userID.concat(randomstring);
+
+      console.log("genarateId",genarateId)
       let NewUser = new studentSchema({
         stdId:genarateId,
         name,

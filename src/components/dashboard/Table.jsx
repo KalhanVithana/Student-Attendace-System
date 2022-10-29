@@ -68,7 +68,7 @@ export default function TableUser() {
       },
     },
     {
-      title: "Course ID",
+      title: "Course Name",
       dataIndex: "courseName",
       key: "courseName",
     },
@@ -290,7 +290,7 @@ export default function TableUser() {
 
   return (
     <div>
-      <div style={{ display: "flex" }}>
+       <div style={{ display: "flex" ,marginTop:'3rem' }}>
         <Input.Search
           placeholder=" Search Class ID"
           onChange={(e) => {

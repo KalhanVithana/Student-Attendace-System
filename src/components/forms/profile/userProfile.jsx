@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UpdateUser } from "../../Redux/action/signAction";
 import '../../../assets/styles/loginRegistrationStyles.css'
+import Text from "antd/lib/typography/Text";
 
 export default function UserProfile(props) {
   const location = useLocation();
@@ -53,6 +54,8 @@ export default function UserProfile(props) {
     <div  style={{ textAlign: "center", alignItems: "center", justifyContent:'center'  }}>
      <Row className="userprofile">
       <Col  xs={24} sm={24} md={24} lg={20} xl={20}>
+      <h1 style={{textAlign:"center", fontSize:"30px", fontWeight:700, marginBottom:"50px",fontFamily:'sans-serif',color:'slategrey'}}>User Profile</h1>
+        
         <div className="profile">
         <Form
           form={form}

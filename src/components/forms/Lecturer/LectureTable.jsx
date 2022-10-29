@@ -136,7 +136,7 @@ export default function LectureTable() {
 
   return (
     <div>
-       <div style={{ display: "flex" }}>
+       <div style={{ display: "flex" ,marginTop:'3rem' }}>
             <Input.Search
               placeholder=" Search  Student Name"
               onChange={(e) => {
@@ -147,12 +147,12 @@ export default function LectureTable() {
               style={{ color: "blue", fontSize: "xx-large" }}
               diabled
               onClick={() => {
-                generatePDF(apiData);
+                generatePDF(usersData);
               }}
             />
             <a
               onClick={() => {
-                generatePDF(apiData);
+                generatePDF(usersData);
               }}
             >
               Download

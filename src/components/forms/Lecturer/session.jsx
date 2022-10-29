@@ -45,7 +45,8 @@ export default function AddSession() {
     <Row className=" session">
      
       <Col  xs={24} sm={24} md={24} lg={20} xl={24}>
-      <h1 style={{textAlign:"center", fontSize:"30px", fontWeight:700, marginBottom:"50px"}}>Add Session</h1>
+      <h1 style={{textAlign:"center", fontSize:"30px", fontWeight:700, marginBottom:"50px",fontFamily:'sans-serif',color:'slategrey'}}>Add Sessions</h1>
+       
         <div className="">
         <Form
           name="basic"
@@ -68,7 +69,7 @@ export default function AddSession() {
           </Form.Item>
 
           <Form.Item
-            label="Course ID"
+            label="Course Name"
             name="courseName"
             rules={[
               { required: true, message: "Please input your courseName !" },

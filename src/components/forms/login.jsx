@@ -32,7 +32,7 @@ export default function LoginForm(props) {
     <div style={{ textAlign: "center", alignItems: "center" }}>
      <Row>
       <Col  xs={24} sm={24} md={24} lg={12} xl={12}>
-        <div><h1 className="headingContainer" ><span className="heading">IHM Hotel School</span><span className="spanhead"> CourseWeb</span></h1></div>
+        <div><h1 className="headingContainer" ><span className="heading">IHM Hotel School</span><span className="spanhead"> CourseWork</span></h1></div>
       <div
                 className="leftSection"
                 style={{

@@ -134,9 +134,8 @@ export default function AdminTable() {
       
 
   return (
-    <div>
-       <h2>Dashboard</h2>
-       
+    <div style={{marginTop:'3rem' }}>
+    
           <div  style={{ top: "10px",marginBottom:"10px",display:'flex'}}>
 
           <Text style={{marginRight:'1rem'}} strong>Select category</Text>

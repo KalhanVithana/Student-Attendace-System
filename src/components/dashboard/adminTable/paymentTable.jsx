@@ -201,7 +201,7 @@ export default function PaymentTable() {
       </Modal>
       <div className="middleContainer">
         <div className="dashbord-links">
-          <h2>Dashboard</h2>
+      
 
           <div style={{ display: "flex" }}>
             <Input.Search

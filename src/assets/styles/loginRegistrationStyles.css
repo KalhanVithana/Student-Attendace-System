@@ -40,6 +40,15 @@ font-weight: 600;
  color:white;
 
 }
+
+.heading2{
+  text-align: left;
+ font-size: 25px;
+font-weight: 600;
+ background-color:#242d66;
+ color:white;
+
+}
 .spanhead{
   text-align: left;
   font-weight: 600;
@@ -47,6 +56,16 @@ font-size: 40px;
 background-color: #fff;
 color:#242d66
 }
+
+.spanhead2{
+  text-align: left;
+  font-weight: 600;
+font-size: 25px;
+background-color: #fff;
+color:#242d66
+}
+
+
 .mainHead{
   margin-left: 0;
   padding: 0;
@@ -65,7 +84,7 @@ height:100%
 }
 .userprofile{
 padding-right: 20%;
-padding-top: 15%;
+padding-top: 10%;
 padding-left: 20%;
 flex-direction: column;
   justify-content: center;
@@ -80,7 +99,7 @@ padding-left:0 !important;
 display: flex;
 justify-content: center;
 flex-direction:column;
-height:85vh;
+height:65vh;
 margin-top: 10px;
 }
 
