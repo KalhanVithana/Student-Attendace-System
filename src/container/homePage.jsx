@@ -14,6 +14,8 @@ import StudentProfile from '../components/forms/students/studentProfile';
 import EnrollCourse from '../components/forms/students/enrollCourse';
 import AdminDashboard from '../components/dashboard/adminDashboard';
 import PaymentTable from '../components/dashboard/adminTable/paymentTable';
+import AddSession from '../components/forms/Lecturer/session';
+import Payment from '../components/forms/students/payment';
 const { Header, Content, Footer } = Layout;
 
 
@@ -29,7 +31,7 @@ export default function HomePage() {
     <Header style={{width:'100%', minHeight:'5vh'}}>
       <div className="logo" />
       <div  style={{marginLeft:'70%'}}>
-      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} className="navbar">
         <Menu.Item key="1" onClick={(e)=>{
           console.log("cick",e.key)
           setkey(e.key)
@@ -60,6 +62,9 @@ export default function HomePage() {
        {/* <PaymentTable/> */}
        {/* <StudentProfile/> */}
        {/* <AdminDashboard/> */}
+ {/* <AddSession/> */}
+       {/* <Payment/> */}
+
        
    
     </Content>

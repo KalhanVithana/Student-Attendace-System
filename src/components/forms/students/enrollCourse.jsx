@@ -39,6 +39,7 @@ export default function EnrollCourse() {
     <div className="enrollContainer" style={{ alignItems: "center" ,justifyContent:'center', flexDirection:'column'}}>
       <Row >
         <Col  xs={24} sm={24} md={24} lg={24} xl={24}>
+        <h1 style={{textAlign:"center", fontSize:"30px", fontWeight:700, marginBottom:"50px"}}>Enroll Courses</h1>
         <Form
           name="basic"
           labelCol={{ span: 8 }}

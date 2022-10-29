@@ -6,6 +6,8 @@ import {
 import axios from "axios";
 import { responseMiddleware } from "../../../middleware/notification";
 import Text from "antd/lib/typography/Text";
+import payments from "../../../assets/images/paymnt.png";
+import '../../../assets/styles/loginRegistrationStyles.css'
 export default function Payment() {
     const [form, setForm] = useState({
         AreaOffice: "",
@@ -55,9 +57,9 @@ export default function Payment() {
               >
                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                   <div
-                    className="leftSectionRegister"
+                    className="leftSection paymntcontainer"
                     style={{
-                      backgroundImage: `url(${"registerbill"})`,
+                      backgroundImage: `url(${payments})`,
                     }}
                   ></div>
                 </Col>
@@ -83,7 +85,7 @@ export default function Payment() {
                               <Option value="Kaluthara">Kaluthara</Option>
                             </Select>
                           </Col>
-                          <Col xs={24} sm={24} md={24} lg={24} xl={12} style={{marginTop:"1rem"}}>
+                          <Col xs={24} sm={24} md={24} lg={24} xl={12} >
                             <p className="label">course Id</p>
                             <Input
                               placeholder="Course Id"
@@ -123,7 +125,7 @@ export default function Payment() {
                         </Row>
     
                         <div className="registerBillSection" style={{marginTop:"1rem"}}>
-                          <Button className="registerBillBtn" htmlType="submit">
+                          <Button type="primary" className="registerBillBtn btnblue" htmlType="submit">
                             submit
                           </Button>
                         </div>
