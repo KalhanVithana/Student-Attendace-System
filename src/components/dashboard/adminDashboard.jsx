@@ -134,6 +134,7 @@ export default function AdminDashboard({ children }, props) {
               className="site-layout-background"
               style={{ padding: 24, minHeight: 360 }}
             >
+                <div><h1 className="headingContainer" ><span className="heading">IHM Hotel School</span><span className="spanhead"> CourseWeb</span></h1></div>
               <Outlet />
             </div>
           </Content>

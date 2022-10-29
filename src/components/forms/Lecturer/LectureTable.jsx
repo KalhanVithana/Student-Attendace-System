@@ -1,6 +1,6 @@
 import { Input, Modal, Table, DatePicker, TimePicker, Typography ,Radio, Button} from "antd";
 import React, { useEffect, useState } from "react";
-import { VideoCameraOutlined, DeleteOutlined, EditOutlined, FilePdfOutlined } from "@ant-design/icons";
+import { VideoCameraOutlined, DeleteOutlined, EditOutlined, FilePdfOutlined,AimOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -74,7 +74,7 @@ export default function LectureTable() {
                     "ondelete(record);";
                   }}
                 />
-                </>: <VideoCameraOutlined
+                </>: <AimOutlined
                   
                 />}
                

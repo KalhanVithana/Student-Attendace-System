@@ -25,7 +25,7 @@ export default function EnrollCourse() {
   const OptionArray = (
     <>
       {dataArr.map((res) => {
-        return <Option value={res.classId}>{res.classId}</Option>;
+        return <Option value={res.classId}>{res.classId} - {res.courseName}</Option>;
       })}
     </>
   );
@@ -55,7 +55,7 @@ export default function EnrollCourse() {
           >
             <Select
             className="dropdown"
-              defaultValue="1"
+              defaultValue="Select"
               style={{ width: 250 }}
               showSearch
               placeholder="Select a person"
