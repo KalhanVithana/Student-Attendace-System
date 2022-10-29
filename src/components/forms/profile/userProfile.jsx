@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { Form, Input, Button, Card, Radio } from "antd";
+import { Form, Input, Button, Card, Radio, Row, Col } from "antd";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { UpdateUser } from "../../Redux/action/signAction";
+import '../../../assets/styles/loginRegistrationStyles.css'
 
 export default function UserProfile(props) {
 
@@ -50,11 +51,10 @@ export default function UserProfile(props) {
   };
 
   return (
-    <div style={{ textAlign: "center", alignItems: "center" }}>
-      <Card
-        title=" User Proifle"
-        style={{ width: 400, marginLeft: "30%", marginTop: "5rem" }}
-      >
+    <div  style={{ textAlign: "center", alignItems: "center", justifyContent:'center'  }}>
+     <Row className="userprofile">
+      <Col  xs={24} sm={24} md={24} lg={20} xl={20}>
+        <div className="profile">
         <Form
           form={form}
           name="basic"
@@ -86,6 +86,7 @@ export default function UserProfile(props) {
          </Form.Item> :
          
          <Form.Item
+         className="label-user"
          label="Admin Id"
          name="instructorId"
          rules={[
@@ -130,7 +131,10 @@ export default function UserProfile(props) {
             </Button>
           </Form.Item>
         </Form>
-      </Card>
+        </div>
+        </Col>
+        </Row>
+     
     </div>
   );
 }

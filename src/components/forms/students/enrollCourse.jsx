@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { Form, Input, Button, Card, Select, DatePicker } from "antd";
+import { Form, Input, Button, Card, Select, DatePicker, Row, Col } from "antd";
 import { useDispatch } from "react-redux";
 import { enrollCourseList } from "../../Redux/action/courseAction";
 import axios from "axios";
+import '../../../assets/styles/loginRegistrationStyles.css'
 
 const { Option } = Select;
 
@@ -35,11 +36,9 @@ export default function EnrollCourse() {
   };
 
   return (
-    <div style={{ textAlign: "center", alignItems: "center" }}>
-      <Card
-        title="Enroll Course"
-        style={{ width: 300, marginLeft: "30%", marginTop: "5rem" }}
-      >
+    <div className="enrollContainer" style={{ alignItems: "center" ,justifyContent:'center', flexDirection:'column'}}>
+      <Row >
+        <Col  xs={24} sm={24} md={24} lg={24} xl={24}>
         <Form
           name="basic"
           labelCol={{ span: 8 }}
@@ -49,13 +48,15 @@ export default function EnrollCourse() {
           autoComplete="off"
         >
           <Form.Item
+          className="classId"
             label="Class ID"
             name="classId"
             rules={[{ required: true, message: "Please input your course!" }]}
           >
             <Select
+            className="dropdown"
               defaultValue="1"
-              style={{ width: 120 }}
+              style={{ width: 250 }}
               showSearch
               placeholder="Select a person"
               optionFilterProp="children"
@@ -68,12 +69,13 @@ export default function EnrollCourse() {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className="btnblue enrollbtn">
               Enroll
             </Button>
           </Form.Item>
         </Form>
-      </Card>
+        </Col>
+        </Row>
     </div>
   );
 }
