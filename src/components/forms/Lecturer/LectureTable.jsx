@@ -6,29 +6,30 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "jspdf-autotable";
 import jsPDF from "jspdf";
-import Text from "antd/lib/typography/Text";
+
 
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY/MM/DD";
 const timeFormat = "HH:mm:ss";
-export default function AdminTable() {
+export default function LectureTable() {
 
   const [usersData,setUsersData] = useState([]);
   const [type,setType] = useState();
     const location = useLocation();
-    const [search, setSearch] = useState("");
     const { role } = location.state
+    const [search, setSearch] = useState("");
+
     const columns = [
         {
           title: "name",
           dataIndex: "name",
           key: "name",
-          filteredValue: [search],
-      onFilter: (value, record) => {
-        return record.name.toLowerCase().includes(value.toLowerCase());
-      },
-
           fixed: "left",
+          filteredValue: [search],
+          onFilter: (value, record) => {
+            return record.name.toLowerCase().includes(value.toLowerCase());
+          },
+    
         },
         {
           title: "Email",
@@ -86,7 +87,7 @@ export default function AdminTable() {
 
        useEffect(async()=>{
         const userRes =  await axios.get(
-          `http://localhost:4000/user/get/users?role=${type}`,
+          `http://localhost:4000/user/get/users?role=students`,
           
         );
         setUsersData(userRes.data)
@@ -128,27 +129,16 @@ export default function AdminTable() {
     
         doc.autoTable(content);
     
-        doc.save("userReport.pdf");
+        doc.save("StudentReport.pdf");
       };
  
       
 
   return (
     <div>
-       <h2>Dashboard</h2>
-       
-          <div  style={{ top: "10px",marginBottom:"10px",display:'flex'}}>
-
-          <Text style={{marginRight:'1rem'}} strong>Select category</Text>
-          <Radio.Group onChange={(e)=> setType(e.target.value)} defaultValue='student'>
-              <Radio value={"student"}>Student</Radio>
-              <Radio value={"lecture"}> Lecture</Radio>
-            </Radio.Group>
-
-          </div>
-            <div style={{ display: "flex" }}>
+       <div style={{ display: "flex" }}>
             <Input.Search
-              placeholder=" Search Name "
+              placeholder=" Search  Student Name"
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
@@ -157,17 +147,18 @@ export default function AdminTable() {
               style={{ color: "blue", fontSize: "xx-large" }}
               diabled
               onClick={() => {
-                generatePDF(usersData);
+                generatePDF(apiData);
               }}
             />
             <a
               onClick={() => {
-                generatePDF(usersData);
+                generatePDF(apiData);
               }}
             >
               Download
             </a>
           </div>
+         
       <Table columns={columns} dataSource={usersData} />
     </div>
   );

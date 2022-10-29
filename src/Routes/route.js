@@ -7,13 +7,16 @@ import {
   } from "react-router-dom";
 import AdminDashboard from '../components/dashboard/adminDashboard';
 import AdminTable from '../components/dashboard/adminTable/adminTable';
+import PaymentTable from '../components/dashboard/adminTable/paymentTable';
 import UserTable from '../components/dashboard/Table';
 import LectureProfile from '../components/forms/Lecturer/lectureProfile';
+import LectureTable from '../components/forms/Lecturer/LectureTable';
 import AddSession from '../components/forms/Lecturer/session';
 import LoginForm from '../components/forms/login';
 import UserProfile from '../components/forms/profile/userProfile';
 import RegisterForm from '../components/forms/registerForm';
 import EnrollCourse from '../components/forms/students/enrollCourse';
+import Payment from '../components/forms/students/payment';
 import HomePage from '../container/homePage';
 
 export default function route() {
@@ -21,7 +24,6 @@ export default function route() {
   return (
     <BrowserRouter>
 
-    
     <Routes>
     <Route path="/" element={< HomePage/>}></Route>
      
@@ -37,6 +39,9 @@ export default function route() {
           <Route path="session" element={< AddSession/>}/> 
           <Route path="user" element={< UserProfile/>}/>  
           <Route path="admin" element={< AdminTable/>}/>  
+          <Route path="payment" element={< Payment/>}/> 
+          <Route path="paytable" element={< PaymentTable/>}/> 
+          <Route path="lecTable" element={< LectureTable/>}/> 
          
         
         </Route>

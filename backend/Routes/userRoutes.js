@@ -8,7 +8,10 @@ let studentSchema = require("../Models/studentModel");
 let lectureSchema = require("../Models/lecturerModel");
 let adminSchema = require("../Models/adminModel");
 let lecSession = require("../Models/lecSession");
+let PaymentAccount = require("../Models/PaymentModel");
 const auth = require("../middleware/auth");
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
 
 // CREATE REGISTER
 router.route("/register").post(async (req, res) => {
@@ -27,24 +30,24 @@ router.route("/register").post(async (req, res) => {
 
       const passwordhash = await bcrypt.hash(password, salt);
       console.log(passwordhash);
-      let  userID = 'Ins'
+      let userID = "Ins";
       let randomstring = Math.floor(Math.random() * (1000 - 100) + 100) / 100;
-      let genarateId = userID.concat(randomstring)
+      let genarateId = userID.concat(randomstring);
 
       let NewUser = new lectureSchema({
         name,
         email,
         gender,
         role: "lecture",
-        instructorId:genarateId,
+        instructorId: genarateId,
         password: passwordhash,
       });
       const saveUser = await NewUser.save();
 
       console.log(saveUser);
       return res.json(saveUser);
-    }if(admin){
-
+    }
+    if (admin) {
       const existingUser = await adminSchema.findOne({ email: email });
       if (existingUser) {
         return res.status(400).json({ msg: `user alreay exists  ` });
@@ -53,27 +56,23 @@ router.route("/register").post(async (req, res) => {
 
       const passwordhash = await bcrypt.hash(password, salt);
       console.log(passwordhash);
-      let  userID = 'Ins'
+      let userID = "Ins";
       let randomstring = Math.floor(Math.random() * (1000 - 100) + 100) / 100;
-      let genarateId = userID.concat(randomstring)
+      let genarateId = userID.concat(randomstring);
 
       let NewUser = new adminSchema({
         name,
         email,
         gender,
         role: "admin",
-        instructorId:genarateId,
+        instructorId: genarateId,
         password: passwordhash,
       });
 
       const saveUser = await NewUser.save();
       console.log(saveUser);
-     return res.json(saveUser);
-      
-
-    }
-    
-    else {
+      return res.json(saveUser);
+    } else {
       const existingUser = await studentSchema.findOne({ email: email });
       if (existingUser) {
         return res.status(400).json({ msg: `user alreay exists  ` });
@@ -82,8 +81,11 @@ router.route("/register").post(async (req, res) => {
 
       const passwordhash = await bcrypt.hash(password, salt);
       console.log(passwordhash);
-
+      let userID = "Ins";
+      let randomstring = Math.floor(Math.random() * (1000 - 100) + 100) / 100;
+      let genarateId = userID.concat(randomstring);
       let NewUser = new studentSchema({
+        stdId:genarateId,
         name,
         email,
         gender,
@@ -118,14 +120,15 @@ router.route("/login").post(async (req, res) => {
       }
 
       const token = jwt.sign({ id: user._id }, "#123");
-      res.json({
+      return res.json({
         token,
         user: {
           id: user._id,
           role: user.role,
         },
       });
-    } if (admin) {
+    }
+    if (admin) {
       const user = await adminSchema.findOne({ email: email });
       if (!user) {
         return res.status(400).json({ msg: `No User existing in this email ` });
@@ -136,16 +139,14 @@ router.route("/login").post(async (req, res) => {
       }
 
       const token = jwt.sign({ id: user._id }, "#123");
-      res.json({
+      return res.json({
         token,
         user: {
           id: user._id,
           role: user.role,
         },
       });
-    } 
-    
-    else {
+    } else {
       const user = await studentSchema.findOne({ email: email });
       if (!user) {
         return res.status(400).json({ msg: `No User existing in this email ` });
@@ -156,7 +157,7 @@ router.route("/login").post(async (req, res) => {
       }
 
       const token = jwt.sign({ id: user._id }, "#123");
-      res.json({
+      return res.json({
         token,
         user: {
           id: user._id,
@@ -165,14 +166,13 @@ router.route("/login").post(async (req, res) => {
       });
     }
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 });
 
 router.route("/up").put(auth, async (req, res) => {
   try {
-    const { classId, enroll,courseName } = req.body;
-
+    const { classId, enroll, courseName } = req.body;
 
     const findCourseId = await lecSession.findOne({ classId: classId });
 
@@ -182,8 +182,6 @@ router.route("/up").put(auth, async (req, res) => {
     const SaveCourse = new lecSession({
       enroll: req.user,
     });
-
-  
 
     const UpdateData = await lecSession.findOneAndUpdate(
       { classId: classId },
@@ -205,8 +203,8 @@ router.route("/add").post(auth, async (req, res) => {
     const findCourseId = await lecSession.findOne({ classId: classId });
 
     if (findCourseId)
-    return res.status(401).json({ msg: " Class Id already exsist" });
-   
+      return res.status(401).json({ msg: " Class Id already exsist" });
+
     const SaveCourse = new lecSession({
       classId,
       lecDate,
@@ -225,28 +223,54 @@ router.route("/add").post(auth, async (req, res) => {
   }
 });
 
-router.route("/uid").post(auth, async (req, res) => {
-  const { role } = req.body;
+router.route("/uid").get(auth, (req, res) => {
+  // let role = req.query.role;
+  // let user = req.user;
+  // if (role == "lecture") {
+  //   lectureSchema.findOne({ _id: user }).exec((err, user) => {
+  //     if (err) {
+  //       return res.status(400).send({ status: "FAIL" });
+  //     } else {
+  //       return res.json(user);
+  //     }
+  //   });
+  // }
+
+  const { role } = req.query;
+  console.log(role);
   try {
-    if (role === "student") {
-      let user = await studentSchema.findById(req.user);
-
-      res.json(user);
-    } else if (role === "lecture") {
-      let user = await lectureSchema.findById(req.user);
-
-      res.json(user);
-    }else if (role === "admin") {
-      let user = await adminSchema.findById(req.user);
-
-      res.json(user);
-    } 
-    
-    else {
-      res.json("null");
+    if (role == "lecture") {
+      lectureSchema.findOne({ _id: req.user }).exec((err, user) => {
+        if (err) {
+          return res.status(400).send({ status: "FAIL" });
+        } else {
+          console.log("user", user);
+          return res.status(200).json(user);
+        }
+      });
+    }
+    if (role == "student") {
+      studentSchema.findById(req.user).exec((err, user) => {
+        if (err) {
+          return res.status(400).send({ status: "FAIL" });
+        } else {
+          console.log("user", user);
+          return res.status(200).json(user);
+        }
+      });
+    }
+    if (role == "admin") {
+      adminSchema.findById(req.user).exec((err, user) => {
+        if (err) {
+          return res.status(400).send({ status: "FAIL" });
+        } else {
+          console.log("user", user);
+          return res.status(200).json(user);
+        }
+      });
     }
   } catch (e) {
-    res.status(500).json(e);
+    return res.status(500).json(e);
   }
 });
 
@@ -264,20 +288,19 @@ router.route("/session/up").put(auth, async (req, res) => {
       $set: {
         lecDate: lecDate,
         lecTime: lecTime,
-        courseName:courseName
+        courseName: courseName,
       },
     },
     { new: true }
   );
   res.json(sessionUpdate);
-  console.log(sessionUpdate)
+  console.log(sessionUpdate);
 });
 
 router.route("/get/std").get(auth, async (req, res) => {
   const userIDData = await lecSession.find({ enroll: req.user });
   res.json(userIDData);
 });
-
 
 router.route("/get/all").get(auth, (req, res) => {
   lecSession.find((err, data) => {
@@ -289,10 +312,9 @@ router.route("/get/all").get(auth, (req, res) => {
   });
 });
 
-
 router.route("/get/users").get((req, res) => {
   console.log(req.query);
-  if(req.query.role == 'lecture'){
+  if (req.query.role == "lecture") {
     console.log("user");
     lectureSchema.find((err, data) => {
       if (err) {
@@ -302,8 +324,7 @@ router.route("/get/users").get((req, res) => {
         res.json(data);
       }
     });
-  }
-  else {
+  } else {
     studentSchema.find((err, data) => {
       if (err) {
         return next(err);
@@ -312,9 +333,7 @@ router.route("/get/users").get((req, res) => {
       }
     });
   }
- 
 });
-
 
 router.route("/get/delete").delete(async (req, res) => {
   try {
@@ -351,13 +370,15 @@ router.route("/get/update").put(auth, async (req, res) => {
 
 router.route("/at").put(auth, async (req, res) => {
   const { classId } = req.body;
-  
+
   const findStudent = await studentSchema.findById(req.user);
 
   const { name, email } = findStudent;
-  const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh'});
+  const date = new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Ho_Chi_Minh",
+  });
 
-  let time = date
+  let time = date;
   const stdAttendace = {
     name,
     email,
@@ -396,6 +417,65 @@ router.route("/en").put(auth, async (req, res) => {
   }
 });
 
+router.post("/account", upload.single("images"), auth, async (req, res) => {
+  try {
+    // Upload image to cloudinary
+    const { AreaOffice, accountNo, mobileNo, courseId } = req.body;
 
+    console.log("courseId", courseId,AreaOffice);
+
+    const user = await studentSchema.findById({ _id: req.user });
+
+    const result = await cloudinary.uploader.upload(req.file.path);
+
+    // const checkAcc = await PaymentAccount.findOne({ courseId: courseId });
+    // console.log("checkAcc",checkAcc);
+    // if (checkAcc) return res.status(400).json({ msg: `already exsist ` });
+
+    let saveAcc = new PaymentAccount({
+      AreaOffice,
+      accountNo,
+      mobileNo,
+      courseId,
+      customerEmail: user.email,
+      customerId: req.user,
+      avatar: result.secure_url,
+      cloudinary_id: result.public_id,
+    });
+
+    let regiserAcc = await saveAcc.save();
+    res.json(regiserAcc);
+    console.log(regiserAcc);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.route("/payacc").get(auth, (req, res) => {
+  try {
+    PaymentAccount.find((err, data) => {
+      if (err) {
+        return next(err);
+      } else {
+        res.json(data);
+      }
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.route("/delete/:id").delete(async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const resData = await PaymentAccount.findByIdAndDelete({ _id: id });
+
+    console.log(resData);
+    res.json(resData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;

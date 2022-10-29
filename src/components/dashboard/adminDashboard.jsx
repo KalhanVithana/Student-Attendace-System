@@ -4,6 +4,7 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  PlaySquareOutlined,
 } from "@ant-design/icons";
 import "../dashboard/admin.css";
 import { Link, Outlet } from "react-router-dom";
@@ -31,12 +32,8 @@ export default function AdminDashboard({ children }, props) {
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
-          onBreakpoint={(broken) => {
-            
-          }}
-          onCollapse={(collapsed, type) => {
-           
-          }}
+          onBreakpoint={(broken) => {}}
+          onCollapse={(collapsed, type) => {}}
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
@@ -71,26 +68,49 @@ export default function AdminDashboard({ children }, props) {
                 <Link to="/auth/user" state={{ role: roleUser }}>
                   admin Profile
                 </Link>
-              ) :null}
+              ) : null}
             </Menu.Item>
 
-            {roleUser === "admin" ? null : (  <Menu.Item key="3" icon={<VideoCameraOutlined />}>
-              {roleUser === "student" ? (
-                <Link to="/auth/enroll" state={{ role: roleUser }}>
-                  Enroll Course
-                </Link>
-              ) : roleUser === "lecture" ? (
-                <Link to="/auth/session" state={{ role: roleUser }}>
-                  Add Sessions
-                </Link>
-              ) : roleUser === "admin" ? (
-                <Link to="/auth/register" state={{ role: roleUser }}>
-                  Add User
-                </Link>
-              ) : null}
-            </Menu.Item>) }
+            {roleUser === "admin" ? (
+              <>
+                <Menu.Item key="4" icon={<PlaySquareOutlined />}>
+                  <Link to="paytable" state={{ role: roleUser }}>
+                    Payment
+                  </Link>
+                </Menu.Item>
+              </>
+            ) : (
+              <Menu.Item key="3" icon={<VideoCameraOutlined />}>
+                {roleUser === "student" ? (
+                  <Link to="/auth/enroll" state={{ role: roleUser }}>
+                    Enroll Course
+                  </Link>
+                ) : roleUser === "lecture" ? (
+                  <Link to="/auth/session" state={{ role: roleUser }}>
+                    Add Sessions
+                  </Link>
+                ) : roleUser === "admin" ? (
+                  <Link to="/auth/register" state={{ role: roleUser }}>
+                    Add User
+                  </Link>
+                ) : null}
+              </Menu.Item>
+            )}
 
-          
+            {roleUser === "student" ? (
+              <Menu.Item key="4" icon={<PlaySquareOutlined />}>
+                <Link to="/auth/payment" state={{ role: roleUser }}>
+                  Payment
+                </Link>
+              </Menu.Item>
+            ) : roleUser === "lecture"?  <>
+            
+            
+            <Menu.Item key="5" icon={<PlaySquareOutlined />}>
+                <Link to="lecTable" state={{ role: roleUser }}>
+                  Student List
+                </Link>
+                </Menu.Item></>:null}
 
             <Menu.Item key="9" icon={<VideoCameraOutlined />}>
               <Link

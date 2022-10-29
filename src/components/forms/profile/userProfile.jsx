@@ -8,10 +8,8 @@ import { UpdateUser } from "../../Redux/action/signAction";
 import '../../../assets/styles/loginRegistrationStyles.css'
 
 export default function UserProfile(props) {
-
-
   const location = useLocation();
-  const { role } = "location.state";
+  const { role } = location.state;
   const [userId, setUserId] = useState("");
   const [form] = Form.useForm();
 
@@ -20,20 +18,21 @@ export default function UserProfile(props) {
   useEffect(async () => {
     const token = localStorage.getItem("x-auth");
 
-    const userRes = await axios.post(
-      "http://localhost:4000/user/uid",
-      { role },
+    console.log(role);
+    const userRes = await axios.get(
+      `http://localhost:4000/user/uid?role=${role}`,
       { headers: { "x-auth": token } }
     );
 
     setUserId(userRes.data);
-    console.log(userRes.data)
+    console.log(userRes.data);
 
     form.setFieldsValue({
       name: userRes.data.name,
       email: userRes.data.email,
       gender: userRes.data.gender,
       instructorId: userRes.data.instructorId,
+      stdId:userRes.data.stdId
     });
   }, []);
 
@@ -64,37 +63,19 @@ export default function UserProfile(props) {
           onFinish={onFinish}
           autoComplete="off"
         >
-
-      {role === 'lecture' ? 
-           <Form.Item
-           label="Instructor Id"
-           name="instructorId"
-           rules={[
-             { required: true, message: "Please input your user instructor ID!" },
-           ]}
-         >
-           <Input style={{ marginLeft: 4 }}  disabled/>
-         </Form.Item> :role === 'admin' ? 
-           <Form.Item
-           label="Instructor Id"
-           name="instructorId"
-           rules={[
-             { required: true, message: "Please input your user instructor ID!" },
-           ]}
-         >
-           <Input style={{ marginLeft: 4 }}  disabled/>
-         </Form.Item> :
-         
-         <Form.Item
-         className="label-user"
-         label="Admin Id"
-         name="instructorId"
-         rules={[
-           { required: true, message: "Please input your user instructor ID!" },
-         ]}
-       >
-         <Input style={{ marginLeft: 4 }}  disabled/>
-       </Form.Item>}
+          {role === "lecture" ? (
+            <Form.Item label="Instructor Id" name="instructorId">
+              <Input style={{ marginLeft: 4 }} disabled />
+            </Form.Item>
+          ) : role === "admin" ? (
+            <Form.Item label="Instructor Id" name="instructorId">
+              <Input style={{ marginLeft: 4 }} disabled />
+            </Form.Item>
+          ) : (
+            <Form.Item label="Student Id" name="stdId">
+              <Input style={{ marginLeft: 4 }} disabled />
+            </Form.Item>
+          )}
 
           <Form.Item
             label=" User Name"
@@ -106,13 +87,12 @@ export default function UserProfile(props) {
             <Input style={{ marginLeft: 4 }} />
           </Form.Item>
 
-      
           <Form.Item
             label="Email"
             name="email"
             rules={[{ required: true, message: "Please input your  email!" }]}
           >
-            <Input style={{ marginLeft: 4 }}  />
+            <Input style={{ marginLeft: 4 }} />
           </Form.Item>
           <Form.Item
             label="Gender"

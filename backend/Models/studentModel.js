@@ -20,7 +20,9 @@ let studentSchema = new Schema({
   gender:{
     type: String
   },
-  
+  stdId:{
+    type: String
+  }, 
   role :{
     type:String
   }

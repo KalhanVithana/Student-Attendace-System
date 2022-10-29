@@ -34,7 +34,15 @@ export const responseMiddleware = (type, message) => {
         message: "Add Session Sucessfully",
       });
     }
-  } else {
+  } else if (type === "success") {
+    {
+      notification["success"]({
+        message: "Submitted Sucessfully",
+      });
+    }
+  }
+  
+  else {
     console.log("message", message);
     notification["error"]({
       message: `${message}`,

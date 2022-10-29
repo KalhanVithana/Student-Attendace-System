@@ -13,6 +13,7 @@ import AdminTable from '../components/dashboard/adminTable/adminTable';
 import StudentProfile from '../components/forms/students/studentProfile';
 import EnrollCourse from '../components/forms/students/enrollCourse';
 import AdminDashboard from '../components/dashboard/adminDashboard';
+import PaymentTable from '../components/dashboard/adminTable/paymentTable';
 const { Header, Content, Footer } = Layout;
 
 
@@ -56,6 +57,7 @@ export default function HomePage() {
        {/* <UserProfile/> */}
        {/* <EnrollCourse/> */}
        {/* <AdminTable/> */}
+       {/* <PaymentTable/> */}
        {/* <StudentProfile/> */}
        {/* <AdminDashboard/> */}
        

@@ -45,6 +45,7 @@ export default function TableUser() {
   );
   const [viewModel, setViewModel] = useState(false);
   const [idClass, setIdClass] = useState("");
+  const [search, setSearch] = useState("");
   const dispatch = useDispatch();
 
   const location = useLocation();
@@ -61,10 +62,14 @@ export default function TableUser() {
       key: "classId",
       fixed: "left",
       sorter: (a, b) => a.classId - b.classId,
+      filteredValue: [search],
+      onFilter: (value, record) => {
+        return record.classId.toLowerCase().includes(value.toLowerCase());
+      },
     },
     {
       title: "Course ID",
-      dataIndex:"courseName",
+      dataIndex: "courseName",
       key: "courseName",
     },
     {
@@ -152,12 +157,13 @@ export default function TableUser() {
                   onClick={() => {
                     AttendCourse(record);
                   }}
-                > Join</Button>
+                >
+                  {" "}
+                  Join
+                </Button>
               </>
             ) : (
-              <Button  diabled>
-                Not started yet
-              </Button>
+              <Button diabled>Not started yet</Button>
             )}
           </div>
         );
@@ -184,16 +190,15 @@ export default function TableUser() {
     });
   };
 
-
   const onEdit = (obj) => {
     setEditModel(true);
 
-    console.log("objex",obj)
+    console.log("objex", obj);
     setEditSession({ ...obj });
   };
 
   const AttendCourse = async (obj) => {
-    setViewModel(true)
+    setViewModel(true);
     const classId = obj.classId;
     await axios.put(
       "http://localhost:4000/user/at",
@@ -205,14 +210,11 @@ export default function TableUser() {
   };
 
   function onChangeDate(date, dateString) {
- 
-
     setEditSession((pre) => {
       return { ...pre, lecDate: date };
     });
   }
   function onChangeTime(time, timeString) {
-  
     setEditSession((pre) => {
       return { ...pre, lecTime: time };
     });
@@ -232,7 +234,6 @@ export default function TableUser() {
   };
 
   const ondelete = async (record) => {
-
     Modal.confirm({
       title: `are you sure,do you want to delete `,
       okText: "yes",
@@ -248,7 +249,7 @@ export default function TableUser() {
             console.log(res.data);
           });
 
-          dispatch(getSessionList(role));
+        dispatch(getSessionList(role));
       },
     });
   };
@@ -268,11 +269,7 @@ export default function TableUser() {
 
     const headers = [["Student Name", "email", "Attendance"]];
 
-    const PDF = obj.map((obj) => [
-      obj.name,
-      obj.email,
-      obj.time
-    ]);
+    const PDF = obj.map((obj) => [obj.name, obj.email, obj.time]);
 
     let content = {
       startY: 50,
@@ -293,6 +290,14 @@ export default function TableUser() {
 
   return (
     <div>
+      <div style={{ display: "flex" }}>
+        <Input.Search
+          placeholder=" Search Class ID"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+        />
+      </div>
       {!sessionUpdate ? (
         <>
           <Table columns={columns} dataSource={TableData} />
@@ -305,7 +310,7 @@ export default function TableUser() {
             }}
             onOk={() => {
               const data = {
-                id:editSession?._id,
+                id: editSession?._id,
                 classId: editSession?.classId,
                 lecDate: editSession?.lecDate,
                 lecTime: editSession?.lecTime,
@@ -322,7 +327,6 @@ export default function TableUser() {
                 value={editSession?.classId}
                 style={{ marginTop: 10 }}
                 disabled
-                
               />
               <Typography.Text style={{ fontWeight: "bold", marginTop: 10 }}>
                 {" "}
@@ -337,18 +341,13 @@ export default function TableUser() {
                     return { ...pre, courseName: e.target.value };
                   });
                 }}
-            
               />
               <Typography.Text style={{ fontWeight: "bold", marginTop: 10 }}>
                 {" "}
                 session Date
               </Typography.Text>
               <DatePicker
-                defaultValue={
-                  moment(editSession?.lecDate[0])
-                 
-                 
-                }
+                defaultValue={moment(editSession?.lecDate[0])}
                 format={dateFormat}
                 style={{ marginTop: 10 }}
                 onChange={onChangeDate}
@@ -409,8 +408,6 @@ export default function TableUser() {
                 </div>
 
                 {item.attendance.flat().map((res) => {
-                 
-
                   return (
                     <>
                       <List.Item>
@@ -438,7 +435,6 @@ export default function TableUser() {
         />
       </Modal>
 
-
       <Modal
         title="Lecture Room"
         visible={viewModel}
@@ -449,12 +445,8 @@ export default function TableUser() {
           setViewModel(false);
         }}
       >
-       
-      
-       <h5>Waiting Host will be add you soon ....</h5>
-       <Spin size="large" style={{marginLeft:'14rem'}} /> 
-    
-       
+        <h5>Waiting Host will be add you soon ....</h5>
+        <Spin size="large" style={{ marginLeft: "14rem" }} />
       </Modal>
     </div>
   );
