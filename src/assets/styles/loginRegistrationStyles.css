@@ -1,0 +1,81 @@
+.leftSection{
+    background-repeat: no-repeat;
+    background-size: contain;
+    height:70vh;
+    width: 100%;
+}
+.rightSection{
+    justify-content: center;
+    display: flex;
+    padding: 40px 250px 40px 40px;
+  flex-direction: column;
+    height: 85vh; 
+}
+.btnblue{
+  width:200px;
+}
+
+.ant-form-item-label{
+  text-align:left !important;
+}
+.heading{
+  text-align: left;
+ font-size: 40px;
+font-weight: 600;
+ background-color:#242d66;
+ color:white;
+
+}
+.spanhead{
+  text-align: left;
+  font-weight: 600;
+font-size: 40px;
+background-color: #fff;
+color:#242d66
+}
+.mainHead{
+  margin-left: 0;
+  padding: 0;
+
+}
+.headingContainer{
+margin-top: 20px;
+}
+.profile{
+  display: "flex";
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+height:100%
+}
+.userprofile{
+padding-right: 20%;
+padding-top: 15%;
+padding-left: 20%;
+flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.label-user {
+padding-left:0 !important;
+
+}
+.enrollContainer {
+  background-color: white;
+display: flex;
+justify-content: center;
+flex-direction:column;
+height:85vh;
+margin-top: 10px;
+}
+
+
+
+.ant-form-item-label > label {
+  margin-right: 0px;
+}
+.enrollbtn {
+  width:250px;
+
+}

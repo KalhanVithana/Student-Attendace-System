@@ -7,3 +7,16 @@
   .site-layout .site-layout-background {
     background: linear-gradient(90deg, rgba(9,9,61,1) 99%, rgba(9,9,121,1) 100%, rgba(4,2,37,1) 100%, rgba(3,3,106,1) 100%);
   }
+
+  .ant-input:focus {
+   
+      box-shadow: none;
+      border-color: none;
+    
+  }
+  .ant-input:active {
+   
+    box-shadow: none;
+    border-color: none;
+  
+}

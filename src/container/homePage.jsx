@@ -10,6 +10,9 @@ import LoginForm from '../components/forms/login';
 import RegisterForm from '../components/forms/registerForm';
 import UserProfile from '../components/forms/profile/userProfile';
 import AdminTable from '../components/dashboard/adminTable/adminTable';
+import StudentProfile from '../components/forms/students/studentProfile';
+import EnrollCourse from '../components/forms/students/enrollCourse';
+import AdminDashboard from '../components/dashboard/adminDashboard';
 const { Header, Content, Footer } = Layout;
 
 
@@ -20,9 +23,9 @@ export default function HomePage() {
 
   
   return <>
-      <div className="">
-      <Layout className="layout" style={{height:'100%',width:'100%'}}>
-    <Header style={{width:'100%'}}>
+      <div style={{overflowY:"hidden", height:'100vh'}} >
+      <Layout className="layout" style={{ backgroundColor:'lightGray', minHeight:'100vh',overflowY:"hidden", height:'100%'}}>
+    <Header style={{width:'100%', minHeight:'5vh'}}>
       <div className="logo" />
       <div  style={{marginLeft:'70%'}}>
       <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
@@ -44,18 +47,21 @@ export default function HomePage() {
       
       </div>
     </Header>
-    <Content style={{ padding: '0 50px' ,width:'100%'}}>
+    <Content style={{ padding: '10px 70px' ,width:'100%', minHeight:"95vh"}}>
      
-      <div className="site-layout-content"  style={{ margin: '16px 0' }}>
+      <div className="site-layout-content"  style={{ margin: '12px 0' }}>
 
         {key === '1' ?  <LoginForm/> : key === '2' ? <RegisterForm/> :null}
       </div>
        {/* <UserProfile/> */}
+       {/* <EnrollCourse/> */}
        {/* <AdminTable/> */}
+       {/* <StudentProfile/> */}
+       {/* <AdminDashboard/> */}
        
    
     </Content>
-    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+
   </Layout>,
         </div>
   </>;

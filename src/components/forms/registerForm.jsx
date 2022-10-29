@@ -9,9 +9,14 @@ import {
   Select,
   Radio,
   Typography,
+  Row,
+  Col
 } from "antd";
 import { signUpUser } from "../Redux/action/signAction";
 import { useDispatch } from "react-redux";
+import login from "../../assets/images/signup.png";
+import '../../assets/styles/loginRegistrationStyles.css'
+import '../../assets/styles/loginRegistrationStyles.css'
 
 const { Option } = Select;
 
@@ -23,11 +28,19 @@ export default function RegisterForm() {
 
   return (
     <div style={{ textAlign: "center", alignItems: "center" }}>
-      <Card
-        title="Sign Up"
-        style={{ width: 300, marginLeft: "30%", marginTop: "5rem" }}
-      >
-        <Form
+     <Row>
+      <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+      <div><h1 className="headingContainer" ><span className="heading">IHM Computer School</span><span className="spanhead"> CourseWeb</span></h1></div>
+      <div
+                className="leftSection"
+                style={{
+                  backgroundImage: `url(${login})`,
+                }}
+              ></div>
+      </Col>
+      <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+      <div className="rightSection">
+      <Form
           name="basic"
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
@@ -46,7 +59,7 @@ export default function RegisterForm() {
           </Form.Item>
 
           <Form.Item
-            label="Email"
+            label=" User Email"
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
@@ -73,12 +86,15 @@ export default function RegisterForm() {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className="btnblue">
               SIGN UP
             </Button>
           </Form.Item>
         </Form>
-      </Card>
+        </div>
+      </Col>
+      
+        </Row>
     </div>
   );
 }

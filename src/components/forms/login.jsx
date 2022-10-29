@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 
-import { Form, Input, Button, Checkbox, Card, Select, Radio } from "antd";
+import { Form, Input, Button, Checkbox, Card, Select, Radio, Row, Col } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { LoginUser } from "../Redux/action/signAction";
 import { Navigate, useNavigate } from "react-router-dom";
-
+import login from "../../assets/images/login.png";
+import '../../assets/styles/loginRegistrationStyles.css'
 const { Option } = Select;
 
 export default function LoginForm(props) {
@@ -29,11 +30,19 @@ export default function LoginForm(props) {
 
   return (
     <div style={{ textAlign: "center", alignItems: "center" }}>
-      <Card
-        title="Sign In"
-        style={{ width: "25%", marginTop: "5rem", marginLeft: "30rem" }}
-      >
-        <Form
+     <Row>
+      <Col  xs={24} sm={24} md={24} lg={12} xl={12}>
+        <div><h1 className="headingContainer" ><span className="heading">IHM Computer School</span><span className="spanhead"> CourseWeb</span></h1></div>
+      <div
+                className="leftSection"
+                style={{
+                  backgroundImage: `url(${login})`,
+                }}
+              ></div>
+      </Col>
+      <Col  xs={24} sm={24} md={24} lg={12} xl={12}  >
+        <div className="rightSection">
+      <Form
           name="basic"
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
@@ -42,7 +51,7 @@ export default function LoginForm(props) {
           autoComplete="off"
         >
           <Form.Item
-            label="Email"
+            label="User Email"
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
@@ -66,12 +75,16 @@ export default function LoginForm(props) {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className="btnblue">
               SIGN IN
             </Button>
           </Form.Item>
         </Form>
-      </Card>
+        </div>
+      </Col>
+
+      
+        </Row>
     </div>
   );
 }
