@@ -10,7 +10,7 @@ const studentRoute = require('../backend/Routes/userRoutes')
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
-mongoose.connect(dbConfig.db, {
+mongoose.connect(process.env.MONGO_DB, {
   useNewUrlParser: true
 }).then(() => {
   console.log('Database sucessfully connected!')

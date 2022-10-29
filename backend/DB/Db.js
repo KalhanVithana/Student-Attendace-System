@@ -1,3 +1,3 @@
 module.exports = {
-    db: process.env.DB
+    db:  process.env.MONGO_DB
   };
