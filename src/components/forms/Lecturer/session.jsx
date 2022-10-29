@@ -10,11 +10,15 @@ import {
   Radio,
   DatePicker,
   TimePicker,
+  Row,
+  Col,
 } from "antd";
 import { useDispatch } from "react-redux";
 import { AddSessionList } from "../../Redux/action/courseAction";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
+import '../../../assets/styles/loginRegistrationStyles.css'
+
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -36,11 +40,13 @@ export default function AddSession() {
     console.log(time, timeString);
   }
   return (
-    <div style={{ textAlign: "center", alignItems: "center" }}>
-      <Card
-        title="Add Session"
-        style={{ width: 300, marginLeft: "30%", marginTop: "5rem" }}
-      >
+    <div className=" session">
+      
+    <Row className=" session">
+     
+      <Col  xs={24} sm={24} md={24} lg={20} xl={24}>
+      <h1 style={{textAlign:"center", fontSize:"30px", fontWeight:700, marginBottom:"50px"}}>Add Session</h1>
+        <div className="">
         <Form
           name="basic"
           labelCol={{ span: 8 }}
@@ -51,6 +57,7 @@ export default function AddSession() {
           autoComplete="off"
         >
           <Form.Item
+          className="inputfeild"
             label="Class ID"
             name="classId"
             rules={[
@@ -95,7 +102,9 @@ export default function AddSession() {
             </Button>
           </Form.Item>
         </Form>
-      </Card>
+        </div>
+        </Col>
+        </Row>
     </div>
   );
 }
